@@ -8,7 +8,7 @@ export async function FullPageImageView(props: { photoId: string }) {
 
   const image = await getImage(idAsNumber);
 
-  const userInfo = await clerkClient.users.getUser(image.userId);
+  const userInfo = await clerkClient().users.getUser(image.userId);
 
   return (
     <div className="flex h-full w-screen min-w-0 items-center justify-center text-white">
