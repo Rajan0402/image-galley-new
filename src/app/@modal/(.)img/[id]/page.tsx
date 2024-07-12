@@ -7,8 +7,10 @@ export default async function PhotoModal({
   params: { id: string };
 }) {
   return (
-    <Modal>
-      <FullPageImageView photoId={photoId} />
-    </Modal>
+    <div className="flex justify-center items-center">
+      <Modal>
+        <FullPageImageView photoId={photoId} />
+      </Modal>
+    </div>
   );
 }
