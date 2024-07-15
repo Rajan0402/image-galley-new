@@ -4,7 +4,13 @@ import { type ElementRef, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 
-export function Modal({ children }: { children: React.ReactNode }) {
+function CancelSVG() {
+  return <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="size-7">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+}
+
+export function Modal({ children}: { children: React.ReactNode}) {
   const router = useRouter();
   const dialogRef = useRef<ElementRef<"dialog">>(null);
 
@@ -24,8 +30,12 @@ export function Modal({ children }: { children: React.ReactNode }) {
       className="absolute w-full h-full top-0 bg-black/50 backdrop-filter backdrop-brightness-75 backdrop-blur-sm flex justify-center items-center"
       onClose={onDismiss}
     >
-      {children}
-      {/* <button onClick={onDismiss} className="close-button h-10 w-10 border border-red-900" /> */}
+      <div className="w-[80vw]">
+        <div className="flex justify-end pb-1">
+          <button onClick={onDismiss} className="xl:"><CancelSVG/></button>
+        </div>
+        {children}
+      </div>
     </dialog>,
     document.getElementById("modal-root")!,
   );
