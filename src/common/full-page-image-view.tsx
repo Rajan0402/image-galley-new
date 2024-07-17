@@ -1,6 +1,8 @@
+"use client"
+
 import { clerkClient } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
-import { deleteImage, getImage } from "@/server/queries";
+import { useEffect, useState } from "react";
 
 function DownloadSVG() {
   return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="size-4">
@@ -8,14 +10,17 @@ function DownloadSVG() {
         </svg>
 }
 
-export async function FullPageImageView({photoId}:{photoId: string}) {
-  const idAsNumber = Number(photoId);
-  if (Number.isNaN(idAsNumber)) throw new Error("Invalid photo id");
+interface Image {
+  name: string;
+  id: number;
+  url: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date | null;
+}
 
-  const image = await getImage(idAsNumber);
-
-  const userInfo = await clerkClient().users.getUser(image.userId);
-
+export function FullPageImageView({ image, userInfo }:{ image: Image, userInfo: {fullName:string | null} } ) {
+  
   return (
     <div className="max-w-7xl min-w-80 w-full min-h-[70%] bg-black border border-gray-200 rounded-md shadow dark:bg-gray-800 dark:border-gray-700 text-sm lg:text-lg overflow-auto">
       <div className="flex flex-col p-4">
@@ -35,16 +40,9 @@ export async function FullPageImageView({photoId}:{photoId: string}) {
             </div>
           
             <div className="flex flex-row gap-2 justify-between border-t border-gray-700 pt-4">
-              <form 
-              action={async () => {
-                  "use server";
-                  await deleteImage(idAsNumber);
-                }}
-              >
                 <Button type="submit" variant="destructive">
                   Delete
                 </Button>
-              </form>
             </div>
           </div>
         </div>
