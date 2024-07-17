@@ -1,6 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { MouseEvent } from "react";
 
 function DownloadSVG() {
   return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="size-4">
@@ -18,6 +20,22 @@ interface Image {
 }
 
 export function FullPageImageView({ image, userInfo }:{ image: Image, userInfo: {fullName:string | null} } ) {
+  const router = useRouter()
+
+  const handleDeleteImage = async (e: MouseEvent) => {
+    try {
+      const response = await fetch(`/api/delete-image?imageId=${image.id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete image");
+      }
+
+      router.back(); 
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    }
+  }
   
   return (
     <div className="max-w-7xl min-w-80 w-full min-h-[70%] bg-black border border-gray-200 rounded-md shadow dark:bg-gray-800 dark:border-gray-700 text-sm lg:text-lg overflow-auto">
@@ -38,9 +56,9 @@ export function FullPageImageView({ image, userInfo }:{ image: Image, userInfo: 
             </div>
           
             <div className="flex flex-row gap-2 justify-between border-t border-gray-700 pt-4">
-                <Button type="submit" variant="destructive">
-                  Delete
-                </Button>
+              <Button type="submit" variant="destructive" onClick={handleDeleteImage}>
+                Delete
+              </Button>
             </div>
           </div>
         </div>
