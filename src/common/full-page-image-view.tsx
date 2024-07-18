@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
+import { downloadImage } from "@/server/downloadImage";
 
 function DownloadSVG() {
   return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="size-4">
@@ -32,11 +33,16 @@ export function FullPageImageView({ image, userInfo }:{ image: Image, userInfo: 
       }
 
       router.back(); 
+      router.refresh()
     } catch (error) {
       console.error("Error deleting image:", error);
     }
   }
   
+  function handleDownloadImage() {
+    downloadImage(image.url, image.name)
+  }
+
   return (
     <div className="max-w-7xl min-w-80 w-full min-h-[70%] bg-black border border-gray-200 rounded-md shadow dark:bg-gray-800 dark:border-gray-700 text-sm lg:text-lg overflow-auto">
       <div className="flex flex-col p-4">
@@ -44,7 +50,7 @@ export function FullPageImageView({ image, userInfo }:{ image: Image, userInfo: 
           <div className="flex items-center justify-center border-gray-700 border-b lg:border-b-0 lg:border-r lg:h-[70vh] lg:pr-4 pb-4">
             <img src={image.url} className="object-contain" alt={image.name} />
           </div>
-          <div className="flex flex-shrink-0 flex-col gap-2 pt-4 lg:pl-4">
+          <div className="flex flex-shrink-0 flex-col gap-2 pt-4 lg:w-60 lg:pl-4">
             <div className="border-b text-lg">{image.name}</div>
             <div>
               <div>Uploaded By:</div>
@@ -59,6 +65,13 @@ export function FullPageImageView({ image, userInfo }:{ image: Image, userInfo: 
               <Button type="submit" variant="destructive" onClick={handleDeleteImage}>
                 Delete
               </Button>
+              
+              <div>
+                <Button type="submit" variant="link" className="flex gap-2" onClick={handleDownloadImage}>
+                  Download
+                  <DownloadSVG/>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

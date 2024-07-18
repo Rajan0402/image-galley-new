@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 
 function CancelSVG() {
-  return <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="size-7">
+  return <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="5 5 24 24" strokeWidth={2} stroke="white" className="size-7">
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
 }
@@ -32,7 +32,7 @@ export function Modal({ children}: { children: React.ReactNode}) {
     >
       <div className="w-[80vw]">
         <div className="flex justify-end pb-1">
-          <button onClick={onDismiss} className="xl:"><CancelSVG/></button>
+          <button onClick={onDismiss} className=""><CancelSVG/></button>
         </div>
         {children}
       </div>
