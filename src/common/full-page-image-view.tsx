@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
-import { downloadImage } from "@/server/downloadImage";
+import { downloadImage } from "@/utils/downloadImage";
 
 function DownloadSVG() {
   return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="white" className="size-4">
