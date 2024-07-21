@@ -1,8 +1,8 @@
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
-import { db } from "@/server/db";
-import { images } from "@/server/db/schema";
+import { db } from "@/lib/db";
+import { images } from "@/lib/db/schema";
 import { ratelimit } from "@/server/ratelimit";
 
 const f = createUploadthing();
