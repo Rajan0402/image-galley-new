@@ -1,5 +1,5 @@
 import { deleteImage } from "@/server/queries";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export async function DELETE(req: NextRequest ) {
     const params = req.nextUrl.searchParams
