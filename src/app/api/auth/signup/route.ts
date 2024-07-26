@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validateEmail, validatePassword } from "@/utils/validateFormInput";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
-import { user } from "@/lib/db/schema";
+import { users } from "@/lib/db/schema";
 import {v4 as uuidv4} from "uuid";
 
 export async function POST(req: NextRequest ) {
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest ) {
   // create user in db
   const hashedPwd = bcrypt.hashSync(password, 10);
   try {
-    await db.insert(user).values({
+    await db.insert(users).values({
       id: uuidv4(),
       email,
       password: hashedPwd

@@ -6,6 +6,7 @@ import {
   index,
   pgTableCreator,
   serial,
+  text,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -16,7 +17,13 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `image-gallary_${name}`);
+export const createTable = pgTableCreator((name) => `image_gallery_${name}`);
+
+export const users = createTable("user", {
+  id: varchar("id").primaryKey().unique(),
+  email: varchar("email").notNull().unique(),
+  password: varchar("password").notNull()
+})
 
 export const images = createTable(
   "image",
@@ -24,7 +31,7 @@ export const images = createTable(
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 256 }).notNull(),
     url: varchar("url", { length: 1024 }).notNull(),
-    userId: varchar("userId", { length: 256 }).notNull(),
+    userId: varchar("userId", { length: 256 }).notNull().references(() => users.id, { onDelete: "cascade"}),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

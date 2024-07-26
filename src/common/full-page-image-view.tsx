@@ -20,7 +20,7 @@ interface Image {
   updatedAt: Date | null;
 }
 
-export function FullPageImageView({ image, userInfo }:{ image: Image, userInfo: {fullName:string | null} } ) {
+export function FullPageImageView({ image, userInfo }:{ image: Image, userInfo: {email:string | undefined} } ) {
   const router = useRouter()
 
   const handleDeleteImage = async (e: MouseEvent) => {
@@ -54,7 +54,7 @@ export function FullPageImageView({ image, userInfo }:{ image: Image, userInfo: 
             <div className="border-b text-lg">{image.name}</div>
             <div>
               <div>Uploaded By:</div>
-              <div>{userInfo.fullName}</div>
+              <div>{userInfo.email == undefined? "Unavailable": userInfo.email}</div>
             </div>
             <div>
               <div>Created On:</div>
