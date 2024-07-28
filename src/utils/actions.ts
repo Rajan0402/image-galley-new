@@ -47,7 +47,7 @@ export async function signInAction(currentState: any, formData: FormData) {
     })
 
     if(response.ok){
-      redirect("/sample");
+      redirect("/");
     }else{
       return jsonResponse.error;
     }

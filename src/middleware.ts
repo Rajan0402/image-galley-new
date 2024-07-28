@@ -1,26 +1,25 @@
-import { cookies } from "next/headers";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import * as jose from "jose";
-import { redirect } from "next/navigation";
 
 export async function middleware(req : NextRequest) {
-  const cookie = cookies().get("Authorization");
+  const cookie = req.cookies.get("Authorization");
+  console.log("cookie -------", cookie)
   if (!cookie) {
-    redirect("/login")
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  // Validate it
   const secret = new TextEncoder().encode(process.env.JWT_SECRET);
   const jwt = cookie.value;
 
   try {
     const { payload } = await jose.jwtVerify(jwt, secret, {});
     console.log(payload);
+    return NextResponse.next();
   } catch (err) {
-    redirect("/login")
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 }
 
 export const config = {
-  matcher: ['/'],
+  matcher: ['/', '/img'],
 };
