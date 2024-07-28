@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import React from 'react';
 
-const SignedIn = ({ children }: { children: React.ReactNode}) => {
+export default function SignedIn ({ children }: { children: React.ReactNode}) {
   const cookieStore = cookies();
   const tokenObj = cookieStore.get("Authorization");
 
@@ -10,5 +10,3 @@ const SignedIn = ({ children }: { children: React.ReactNode}) => {
   }
   return <>{children}</>;
 };
-
-export default SignedIn;

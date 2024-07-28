@@ -3,7 +3,6 @@ import * as jose from "jose";
 
 export async function middleware(req : NextRequest) {
   const cookie = req.cookies.get("Authorization");
-  console.log("cookie -------", cookie)
   if (!cookie) {
     return NextResponse.redirect(new URL("/login", req.url));
   }

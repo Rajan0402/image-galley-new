@@ -1,4 +1,5 @@
-import { SignedIn, SignedOut } from "@clerk/nextjs";
+import SignedIn from "@/components/auth/signedIn";
+import SignedOut from "@/components/auth/signedOut";
 import Image from "next/image";
 import Link from "next/link";
 import { getMyImages } from "@/server/queries";
@@ -34,6 +35,7 @@ export default async function HomePage() {
       </SignedOut>
       <SignedIn>
         <Images />
+        and some randome gibberish
       </SignedIn>
     </main>
   );
