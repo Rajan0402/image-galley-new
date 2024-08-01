@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import "@uploadthing/react/styles.css";
 
 // import { ClerkProvider } from "@clerk/nextjs";
+import { AuthProvider } from "@/context/authProvider";
 
 import { GeistSans } from "geist/font/sans";
 import { TopNav } from "./_components/topnav";
@@ -25,8 +26,8 @@ export default function RootLayout({
   modal: React.ReactNode;
 }) {
   return (
-    // <ClerkProvider>
-      // {/* // <CSPostHogProvider> */}
+    <AuthProvider>
+      {/* // <CSPostHogProvider> */}
         <html lang="en" className={`${GeistSans.variable}`}>
           <NextSSRPlugin
             /**
@@ -47,7 +48,7 @@ export default function RootLayout({
             <Toaster />
           </body>
         </html>
-    // {/* //   </CSPostHogProvider> */}
-    // </ClerkProvider>
+     {/* //   </CSPostHogProvider> */}
+    </AuthProvider>
   );
 }

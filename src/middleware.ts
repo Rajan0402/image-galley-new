@@ -12,7 +12,7 @@ export async function middleware(req : NextRequest) {
 
   try {
     const { payload } = await jose.jwtVerify(jwt, secret, {});
-    console.log(payload);
+    // console.log(payload);
     return NextResponse.next();
   } catch (err) {
     return NextResponse.redirect(new URL("/login", req.url));

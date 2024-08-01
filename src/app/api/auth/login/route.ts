@@ -17,7 +17,7 @@ export async function POST(req: NextRequest ) {
 
   // lookup the user in db
   const user = await db.query.users.findFirst({where: (model, { eq }) => eq(model.email, email)})
-  if(!user) return NextResponse.json({error: "user doesnot exist"})
+  if(!user) return NextResponse.json({error: "user does not exist"})
 
   const isPwdCorrect = bcrypt.compareSync(password, user.password)
   if(!isPwdCorrect) return NextResponse.json({error: "wrong credentials"})
