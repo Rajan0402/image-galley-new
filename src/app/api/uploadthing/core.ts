@@ -1,27 +1,27 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { db } from "@/lib/db";
 import { images } from "@/lib/db/schema";
 import { ratelimit } from "@/server/ratelimit";
+import { getUser } from "@/server/queries";
 
 const f = createUploadthing();
 
 export const ourFileRouter = {
   imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 40 } })
     .middleware(async ({ req }) => {
-      const user = auth();
-      if (!user.userId) throw new UploadThingError("Unauthorized");
+      const user = await getUser();
+      if (!user?.id) throw new UploadThingError("Unauthorized");
 
-      const fullUserData = await currentUser();
+      // const fullUserData = await currentUser();
 
-      if (fullUserData?.privateMetadata?.["can-upload"] !== true)
-        throw new UploadThingError("User Does Not Have Upload Permissions");
+      // if (fullUserData?.privateMetadata?.["can-upload"] !== true)
+      //   throw new UploadThingError("User Does Not Have Upload Permissions");
 
-      const { success } = await ratelimit.limit(user.userId);
+      const { success } = await ratelimit.limit(user.id);
       if (!success) throw new UploadThingError("Ratelimited");
 
-      return { userId: user.userId };
+      return { userId: user.id };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       await db.insert(images).values({
