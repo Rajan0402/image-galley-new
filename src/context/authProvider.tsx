@@ -1,48 +1,49 @@
-"use client"
+"use client";
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from "react";
 
 interface User {
-  id: string
-  email: string
+  id: string;
+  email: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (userData: User) => void;
-  logout: () => void;
+  signin: (userData: User) => void;
+  signout: () => void;
 }
 
 const defaultAuthContext: AuthContextType = {
-  user: {id: "", email: ""},
-  login: () => {},
-  logout: () => {}
-}
+  user: { id: "", email: "" },
+  signin: () => {},
+  signout: () => {},
+};
 
 const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
-    const login = (userData: User) => {
-        setUser(userData);
-    };
+  const signin = (userData: User) => {
+    console.log("setting user state on signin-------------");
+    setUser(userData);
+  };
 
-    const logout = () => {
-        setUser(null);
-    };
+  const signout = () => {
+    setUser(null);
+  };
 
-    return (
-        <AuthContext.Provider value={{ user, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={{ user, signin, signout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
-export const useAuth = (): AuthContextType => {
+export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};
+}

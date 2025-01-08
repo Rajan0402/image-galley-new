@@ -1,5 +1,7 @@
 "use client";
-import { useAuth, useUser } from "@clerk/nextjs";
+import { useAuth } from "@/context/authProvider";
+import { getUser } from "@/server/queries";
+// import { useAuth, useUser } from "@clerk/nextjs";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { useEffect } from "react";
@@ -20,19 +22,21 @@ export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
 }
 
 function PostHogAuthWrapper({ children }: { children: React.ReactNode }) {
-  const auth = useAuth();
-  const userInfo = useUser();
+  const userInfo = useAuth();
+  console.log("userInfo.user------", userInfo.user);
+  // const userInfo = useUser();
+  // const userInfo = await getUser()
 
   useEffect(() => {
     if (userInfo.user) {
       posthog.identify(userInfo.user.id, {
-        email: userInfo.user.emailAddresses[0]?.emailAddress,
-        name: userInfo.user.fullName,
+        email: userInfo.user.email,
+        // name: userInfo.user.fullName,
       });
-    } else if (!auth.isSignedIn) {
+    } else if (!userInfo.user) {
       posthog.reset();
     }
-  }, [auth, userInfo]);
+  }, [userInfo]);
 
   return children;
 }

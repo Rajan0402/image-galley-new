@@ -1,26 +1,26 @@
 import "server-only";
 import { db } from "../lib/db";
 import { images } from "../lib/db/schema";
-import { and, eq} from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import analyticsServerClient from "./analytics";
-import { cookies } from 'next/headers';
+import { cookies } from "next/headers";
 import * as jose from "jose";
 
 export async function getUserFromCookie() {
   const cookieStore = cookies();
-  const authToken = cookieStore.get('Authorization')
+  const authToken = cookieStore.get("Authorization");
 
   if (!authToken) {
     redirect("/login");
   }
 
-  const jwt = authToken.value
+  const jwt = authToken.value;
   const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
   try {
     const { payload } = await jose.jwtVerify(jwt, secret, {});
-    return payload
+    return payload;
   } catch (err) {
     redirect("/login");
   }
@@ -28,23 +28,23 @@ export async function getUserFromCookie() {
 
 export async function getUserFromDB(id: string) {
   const user = await db.query.users.findFirst({
-    columns:{
+    columns: {
       id: true,
-      email: true
+      email: true,
     },
-    where: (model, {eq}) => eq(model.id, id)
-  })
+    where: (model, { eq }) => eq(model.id, id),
+  });
 
-  return user
+  return user;
 }
 
 export async function getUser() {
-  const userPayload = await getUserFromCookie()
-  if(!userPayload?.sub) throw new Error("Unauthorized")
-  
-  const user = await getUserFromDB(userPayload?.sub)
+  const userPayload = await getUserFromCookie();
+  if (!userPayload?.sub) throw new Error("Unauthorized");
 
-  return user
+  const user = await getUserFromDB(userPayload?.sub);
+
+  return user;
 }
 
 export async function getMyImages() {

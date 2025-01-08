@@ -1,7 +1,6 @@
 import "@/styles/globals.css";
 import "@uploadthing/react/styles.css";
 
-// import { ClerkProvider } from "@clerk/nextjs";
 import { AuthProvider } from "@/context/authProvider";
 
 import { GeistSans } from "geist/font/sans";
@@ -10,7 +9,7 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "./api/uploadthing/core";
 import { Toaster } from "@/components/ui/sonner";
-// import { CSPostHogProvider } from "./_analytics/provider";
+import { CSPostHogProvider } from "./_analytics/provider";
 
 export const metadata = {
   title: "Image Gallery",
@@ -27,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <AuthProvider>
-      {/* // <CSPostHogProvider> */}
+      <CSPostHogProvider>
         <html lang="en" className={`${GeistSans.variable}`}>
           <NextSSRPlugin
             /**
@@ -38,17 +37,19 @@ export default function RootLayout({
              */
             routerConfig={extractRouterConfig(ourFileRouter)}
           />
-          <body className={`font-sans dark`}>
-            <div className="grid h-screen grid-rows-[auto,1fr]">
-              <TopNav />
-              <main className="overflow-y-scroll p-4">{children}</main>
-              {modal}
+          <body className={`dark font-sans`}>
+            <div className="">
+              <div className="grid max-w-screen-2xl grid-rows-[auto,1fr]">
+                <TopNav />
+                <main className="overflow-y-scroll p-4">{children}</main>
+                {modal}
+              </div>
             </div>
             <div id="modal-root" />
             <Toaster />
           </body>
         </html>
-     {/* //   </CSPostHogProvider> */}
+      </CSPostHogProvider>
     </AuthProvider>
   );
 }

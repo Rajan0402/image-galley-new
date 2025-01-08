@@ -1,18 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import * as jose from "jose";
+import { verifyAuth } from "./utils/auth";
 
-export async function middleware(req : NextRequest) {
+export async function middleware(req: NextRequest) {
+  console.log("in middleware fn -------");
   const cookie = req.cookies.get("Authorization");
   if (!cookie) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET);
   const jwt = cookie.value;
 
   try {
-    const { payload } = await jose.jwtVerify(jwt, secret, {});
-    // console.log(payload);
+    const verifiedToken = await verifyAuth(jwt).catch((err) => {
+      console.log(err);
+    });
+    if (verifiedToken) {
+      console.log("token present---------------");
+    }
+
+    if (verifiedToken && req.nextUrl.pathname.includes("/signin")) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
     return NextResponse.next();
   } catch (err) {
     return NextResponse.redirect(new URL("/login", req.url));
@@ -20,5 +28,5 @@ export async function middleware(req : NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/img'],
+  matcher: ["/img"],
 };
